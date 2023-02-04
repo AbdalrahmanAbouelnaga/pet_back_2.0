@@ -29,7 +29,8 @@ class Profile(AbstractUser):
 
         self.thumbnail = thumbnail
 
-    def save(self) -> None:
+    def save(self,*args,**kwargs) -> None:
         if self.image:
-            self.make_thumbnail()
-        return super().save()
+            if not self.thumbnail:
+                self.make_thumbnail()
+        return super().save(*args,**kwargs)

@@ -2,3 +2,6 @@ env
 db.sqlite3
 images
 thumbnails
+build_files.sh
+firebase.txt
+vercel.json
