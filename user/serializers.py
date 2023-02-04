@@ -32,7 +32,6 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(required=False)
     class Meta:
         model=Profile
         fields=(
@@ -43,7 +42,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             'image',
             'password'
         )
-        extra_kwargs = {'password':{'write_only':True}}
+        extra_kwargs = {'password':{'write_only':True},
+                        'image': {'required': False}}
 
     def create(self, validated_data):
         password = validated_data.pop('password')
