@@ -58,7 +58,6 @@ class PetViewset(generics.ListCreateAPIView):
             **req_dict,
             "images":images,
         }
-        print(data)
         serializer = CreatePetSerializer(data=data,context={"request":request})
         if serializer.is_valid():
             serializer.save()

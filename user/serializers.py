@@ -17,6 +17,20 @@ class LoginSerializer(serializers.Serializer):
 
 
 
+class ChangePasswordSerializer(serializers.Serializer):
+    current_password = serializers.CharField()
+    new_password = serializers.CharField()
+
+    def validate(self, data):
+        user = self.context["request"].user
+        is_pass = user.check_password(data["current_password"])
+        if is_pass:
+            user.set_password(data["new_password"])
+            user.save()
+            return user
+        raise serializers.ValidationError("Incorrect current password")
+
+
 class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -40,15 +54,12 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    url = serializers.SerializerMethodField()
 
-    def get_url(self,obj):
-        return reverse('user-detail',kwargs={'username':obj.username})
     class Meta:
         model=Profile
         fields=(
-            'url',
             'username',
+            'email',
             'first_name',
             'last_name',
             'image',

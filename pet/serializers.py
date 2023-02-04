@@ -63,7 +63,6 @@ class CreatePetSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         images = validated_data.pop("images")
         owner = Profile.objects.get(pk=self.context["request"].user.pk)
-        print(owner)
         if not len(images):
             raise serializers.ValidationError('Pet images are required')
         if not validated_data["name"]:
@@ -74,8 +73,19 @@ class CreatePetSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Pet breed is required")
         if not validated_data["birth_date"]:
             raise serializers.ValidationError("Pet birth date is required")
+        
         breed_name = validated_data.pop("breed")
+        breed_name_list = breed_name.split()
+        new_breed_name_list = []
+        for word in breed_name_list:
+            new_breed_name_list.append(word.capitalize())
+        breed_name = ' '.join(new_breed_name_list)
         kind_name = validated_data.pop("kind")
+        kind_name_list = kind_name.split()
+        new_kind_name_list = []
+        for word in kind_name_list:
+            new_kind_name_list.append(word.capitalize())
+        kind_name = ' '.join(new_kind_name_list)
         try:
             breed = Breed.objects.get(name=breed_name)
         except Breed.DoesNotExist:
@@ -86,7 +96,6 @@ class CreatePetSerializer(serializers.ModelSerializer):
                 kind.save()
             breed = Breed(name=breed_name,kind=kind)
             breed.save()
-        print(breed.name)
         pet = Pet.objects.create(owner =owner,breed=breed,**validated_data)
         for image in images:
             img = PetImages(pet = pet,image=image.get("image"))
