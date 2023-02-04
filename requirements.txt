@@ -1,5 +1,5 @@
 gunicorn==20.1.0
-psycopg2==2.8.6
+psycopg2-binary==2.9.5
 asgiref==3.6.0
 backports.zoneinfo==0.2.1
 cffi==1.15.1
