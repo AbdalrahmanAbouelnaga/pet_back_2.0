@@ -32,7 +32,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-
+    image = serializers.ImageField(required=False)
     class Meta:
         model=Profile
         fields=(
